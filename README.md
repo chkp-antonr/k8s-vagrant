@@ -17,7 +17,7 @@ You can use Flannel, Calico or any other CNI. And you can modify it of course, f
 
 ## Configuration
 
-See below the nost interesting parameters.  
+See below the most interesting parameters.  
 You may also modify everything else like `--pod-network-cidr=10.253.192.0/18` or even more following vagrant manuals.  
 
 ### IP addresses
@@ -25,7 +25,7 @@ You may also modify everything else like `--pod-network-cidr=10.253.192.0/18` or
     IP_NET="192.168.3"
     IP_START=70
 
-Define a subnet for your Kubernetes vrtual machines. 
+Define a subnet for your Kubernetes virtual machines. 
 You may have several clusters within the same subnet by starting them from different directories. Just ensure to have proper IP_START in different Vagrantfile.
 
 ### Memory and CPU
@@ -44,7 +44,7 @@ Worker MEM and CPU are relevant to workers only
 
 You may specify 1 or more "worker" or rename them.
 
-### Kuebrnetes version
+### Kubernetes version
 
     apt-get install -qy kubelet=1.19.6-00 kubectl=1.19.6-00 kubeadm=1.19.6-00
 
@@ -92,9 +92,9 @@ Your Host:
     sudo socat tcp-l:80,fork,reuseaddr tcp:192.168.3.71:30513 &
     sudo socat tcp-l:443,fork,reuseaddr tcp:192.168.3.71:31694 &
 
-So connections to your host IP will be successfully forwarded to the worker1 (192.168.3.71) not routable outside ypur host.  
+So connections to your host IP will be successfully forwarded to the worker1 (192.168.3.71) not routable outside of yur host.  
 
-socat is also usefull to map your Host IP:PORT to the NodePort of your workers.  
+socat is also usefull to map your Host IP:PORT directly to the NodePort of your worker.  
 
 ### DVWA
  
