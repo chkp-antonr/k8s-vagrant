@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vuln
+  labels:
+    name: vuln
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dvwa
+  labels:
+    name: dvwa
+  namespace: vuln
+spec:
+  selector:
+    matchLabels:
+      name: dvwa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: dvwa
+    spec:
+      containers:
+      - name: dvwa
+        image: vulnerables/web-dvwa
+        ports:
+        - name: http
+          containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-dvwa
+  namespace: vuln
+spec:
+  selector:
+    name: dvwa
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: in-webg
+  namespace: vuln
+  annotations: 
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: dvwa
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: svc-dvwa
+            port:
+              number: 80
