@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
       worker.vm.network :private_network, ip: "#{IP_NET}.#{i + 1 + IP_START}"
       worker.vm.provision :shell, privileged: false, inline: <<-SHELL
 sudo /vagrant/join.sh
-#echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.3.#{i + 21}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+#echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{i + 21}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{i + 1 + IP_START}"'
 echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{i + 1 + IP_START}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
