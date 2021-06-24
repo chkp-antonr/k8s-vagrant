@@ -64,7 +64,7 @@ apt-get -qq update
 apt-get -qq install -y docker.io apt-transport-https curl
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "exec-opts": ["native.cgroupdriver=systemd"],
+  "exec-opts": ["native.cgroupdriver=cgroupfs"],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "100m"
