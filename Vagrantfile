@@ -90,6 +90,11 @@ OUTPUT_FILE=/vagrant/join.sh
 INIT_FILE=/vagrant/kubeadm_init.log
 rm -rf $OUTPUT_FILE
 
+# install helm
+wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz
+tar -zxvf helm-v3.6.1-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/local/bin/helm
+
 # Start cluster
 #sudo kubeadm init --apiserver-advertise-address=#{IP_NET}.#{IP_START} --pod-network-cidr=10.253.192.0/18 | grep "kubeadm join" > ${OUTPUT_FILE}
 sudo kubeadm init --apiserver-advertise-address=#{IP_NET}.#{IP_START} --pod-network-cidr=10.253.192.0/18  > ${INIT_FILE}
@@ -114,6 +119,15 @@ echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{IP_START}"' | sudo t
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
 
+
+#create ingress
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install ingress-nginx ingress-nginx/ingress-nginx
+
+# install owasp juice shop
+helm repo add seccurecodebox https://charts.securecodebox.io
+helm install my-juice-shop seccurecodebox/juice-shop --version 2.9.0
 
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
