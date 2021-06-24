@@ -93,7 +93,7 @@ rm -rf $OUTPUT_FILE
 # install helm
 wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz
 tar -zxvf helm-v3.6.1-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/helm
+sudo mv linux-amd64/helm /usr/local/bin/helm
 
 # Start cluster
 #sudo kubeadm init --apiserver-advertise-address=#{IP_NET}.#{IP_START} --pod-network-cidr=10.253.192.0/18 | grep "kubeadm join" > ${OUTPUT_FILE}
