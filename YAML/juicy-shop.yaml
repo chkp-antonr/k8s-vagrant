@@ -1,45 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  namespace: default
-  labels:
-    app: juicy-shop
-  name: juicy-shop
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: juicy-shop
-  strategy:
-    rollingUpdate:
-      maxSurge: 2
-  template:
-    metadata:
-      labels:
-        app: juicy-shop
-    spec:
-      containers:
-        - name: juicy-shop
-          image: bkimminich/juice-shop
-          imagePullPolicy: IfNotPresent
-          resources: { }
-      restartPolicy: Always
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: default
-  labels:
-    app: juicy-shop
-  name: juicy-shop
-spec:
-  ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 3000
-  selector:
-    app: juicy-shop
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -58,4 +16,4 @@ spec:
               service:
                 name: juicy-shop
                 port:
-                  number: 8080
+                  number: 3000
