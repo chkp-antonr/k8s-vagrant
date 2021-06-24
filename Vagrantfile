@@ -81,7 +81,7 @@ deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get -qq update
 #apt-get -qq install -y kubernetes-cni=0.6.0-00 kubelet=1.19.6-00 kubectl=1.19.6-00 kubeadm=1.19.6-00
-apt-get install -qy kubelet=1.19.6-00 kubectl=1.19.6-00 kubeadm=1.19.6-00
+apt-get install -qy kubelet kubectl kubeadm kubernetes-cni
 SCRIPT
 # curl -s https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages | grep Version | awk '{print $2}'
 
