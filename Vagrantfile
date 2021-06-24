@@ -120,15 +120,6 @@ curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
 
 
-#create ingress
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-helm install ingress-nginx ingress-nginx/ingress-nginx
-
-# install owasp juice shop
-helm repo add seccurecodebox https://charts.securecodebox.io
-helm install my-juice-shop seccurecodebox/juice-shop --version 2.9.0
-
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 SHELL
