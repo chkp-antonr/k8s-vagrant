@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
       worker.vm.network :private_network, ip: "#{IP_NET}.#{i + 1 + IP_START}"
       worker.vm.provision :shell, privileged: false, inline: <<-SHELL
 sudo /vagrant/join.sh
-#echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.3.#{i + 21}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+#echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{i + 21}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{i + 1 + IP_START}"'
 echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=#{IP_NET}.#{i + 1 + IP_START}"' | sudo tee -a /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
@@ -64,7 +64,7 @@ apt-get -qq update
 apt-get -qq install -y docker.io apt-transport-https curl
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "exec-opts": ["native.cgroupdriver=systemd"],
+  "exec-opts": ["native.cgroupdriver=cgroupfs"],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "100m"
@@ -81,7 +81,7 @@ deb http://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get -qq update
 #apt-get -qq install -y kubernetes-cni=0.6.0-00 kubelet=1.19.6-00 kubectl=1.19.6-00 kubeadm=1.19.6-00
-apt-get install -qy kubelet=1.19.6-00 kubectl=1.19.6-00 kubeadm=1.19.6-00
+apt-get install -qy kubelet=1.20.4-00 kubectl=1.20.4-00 kubeadm=1.20.4-00 kubernetes-cni
 SCRIPT
 # curl -s https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages | grep Version | awk '{print $2}'
 
@@ -89,6 +89,11 @@ $provision_master_node = <<-SHELL
 OUTPUT_FILE=/vagrant/join.sh
 INIT_FILE=/vagrant/kubeadm_init.log
 rm -rf $OUTPUT_FILE
+
+# install helm
+wget https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz
+tar -zxvf helm-v3.6.1-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/local/bin/helm
 
 # Start cluster
 #sudo kubeadm init --apiserver-advertise-address=#{IP_NET}.#{IP_START} --pod-network-cidr=10.253.192.0/18 | grep "kubeadm join" > ${OUTPUT_FILE}
